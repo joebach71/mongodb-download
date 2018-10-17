@@ -10,7 +10,7 @@ const request: any = require('request-promise');
 const md5File: any = require('md5-file');
 
 const DOWNLOAD_URI: string = "https://downloads.mongodb.org";
-const MONGODB_VERSION: string = "latest";
+const MONGODB_VERSION: string = process.env.MONGODB_BINARY_VERSION || "latest";
 
 export interface IMongoDBDownloadOptions {
   platform: string;

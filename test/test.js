@@ -35,6 +35,7 @@ describe('MongoDBDownload class', function() {
     it('should return a download URI', function(done){
         let mongoDBDownload = new MongoDBDownload({});
         mongoDBDownload.getDownloadURI().then((downloadURI) => {
+            console.log(downloadURI.href);
             expect(downloadURI).to.be.an("object");
             done();
         });
