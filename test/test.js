@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
+
 let {MongoDBDownload} = require('../built/mongodb-download.js');
-
-
 
 describe('MongoDBDownload class', function() {
     it('should return a platform', function(){
@@ -36,10 +35,19 @@ describe('MongoDBDownload class', function() {
         let mongoDBDownload = new MongoDBDownload({});
         mongoDBDownload.getDownloadURI().then((downloadURI) => {
             expect(downloadURI).to.be.an("object");
+            expect(downloadURI.hostname).equals('fastdl.mongodb.org');
             done();
         });
     });
-    
+    it('should change download URI', function(done) {
+        let mongoDBDownload = new MongoDBDownload({ downloadCenter: 'http://downloads.mongodb.org' });
+        mongoDBDownload.getDownloadURI().then((downloadURI) => {
+            expect(downloadURI.host).equals('downloads.mongodb.org');
+            expect(downloadURI.protocol).equals('http:');
+            expect(downloadURI).to.be.an('object');
+            done();
+        })
+    })
     it('should return a cr', function(){
         let mongoDBDownload = new MongoDBDownload({});
         expect(mongoDBDownload.getCrReturn()).to.be.a("string");

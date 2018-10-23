@@ -10,17 +10,18 @@ var url = require('url');
 var decompress = require('decompress');
 var request = require('request-promise');
 var md5File = require('md5-file');
-var DOWNLOAD_URI = "https://downloads.mongodb.org";
-var MONGODB_VERSION = "latest";
-var MongoDBDownload = (function () {
+var DOWNLOAD_URI = process.env.MONGODB_BINARY_URI || "https://fastdl.mongodb.org";
+var MONGODB_VERSION = process.env.MONGODB_BINARY_VERSION || "latest";
+var MongoDBDownload = /** @class */ (function () {
     function MongoDBDownload(_a) {
-        var _b = _a.platform, platform = _b === void 0 ? os.platform() : _b, _c = _a.arch, arch = _c === void 0 ? os.arch() : _c, _d = _a.downloadDir, downloadDir = _d === void 0 ? os.tmpdir() : _d, _e = _a.version, version = _e === void 0 ? MONGODB_VERSION : _e, _f = _a.http, http = _f === void 0 ? {} : _f;
+        var _b = _a.platform, platform = _b === void 0 ? os.platform() : _b, _c = _a.arch, arch = _c === void 0 ? os.arch() : _c, _d = _a.downloadDir, downloadDir = _d === void 0 ? os.tmpdir() : _d, _e = _a.version, version = _e === void 0 ? MONGODB_VERSION : _e, _f = _a.downloadCenter, downloadCenter = _f === void 0 ? DOWNLOAD_URI : _f, _g = _a.http, http = _g === void 0 ? {} : _g;
         this.options = {
-            "platform": platform,
-            "arch": arch,
-            "downloadDir": downloadDir,
-            "version": version,
-            "http": http
+            platform: platform,
+            arch: arch,
+            downloadDir: downloadDir,
+            version: version,
+            downloadCenter: downloadCenter,
+            http: http
         };
         this.debug = Debug('mongodb-download-MongoDBDownload');
         this.mongoDBPlatform = new MongoDBPlatform(this.getPlatform(), this.getArch());
@@ -43,6 +44,9 @@ var MongoDBDownload = (function () {
     };
     MongoDBDownload.prototype.getDownloadDir = function () {
         return this.options.downloadDir;
+    };
+    MongoDBDownload.prototype.getDownloadCenter = function () {
+        return this.options.downloadCenter;
     };
     MongoDBDownload.prototype.getDownloadLocation = function () {
         var _this = this;
@@ -350,7 +354,7 @@ var MongoDBDownload = (function () {
     MongoDBDownload.prototype.getDownloadURI = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            var downloadURL = DOWNLOAD_URI + "/" + _this.mongoDBPlatform.getPlatform();
+            var downloadURL = _this.options.downloadCenter + "/" + _this.mongoDBPlatform.getPlatform();
             _this.getArchiveName().then(function (archiveName) {
                 downloadURL += "/" + archiveName;
                 var downloadURLObject = url.parse(downloadURL);
@@ -406,7 +410,7 @@ var MongoDBDownload = (function () {
     return MongoDBDownload;
 }());
 exports.MongoDBDownload = MongoDBDownload;
-var MongoDBPlatform = (function () {
+var MongoDBPlatform = /** @class */ (function () {
     function MongoDBPlatform(platform, arch) {
         this.debug = Debug('mongodb-download-MongoDBPlatform');
         this.platform = this.translatePlatform(platform);
@@ -572,7 +576,7 @@ var MongoDBPlatform = (function () {
                 return "win32";
             case "linux":
                 return "linux";
-            case "elementary OS"://os.platform() doesn't return linux for elementary OS.
+            case "elementary OS": //os.platform() doesn't return linux for elementary OS.
                 return "linux";
             case "sunos":
                 return "sunos5";

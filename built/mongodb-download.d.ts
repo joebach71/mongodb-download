@@ -3,6 +3,7 @@ export interface IMongoDBDownloadOptions {
     arch: string;
     version: string;
     downloadDir: string;
+    downloadCenter: string;
     http: any;
 }
 export interface IMongoDBDownloadProgress {
@@ -16,17 +17,19 @@ export declare class MongoDBDownload {
     mongoDBPlatform: MongoDBPlatform;
     downloadProgress: IMongoDBDownloadProgress;
     debug: any;
-    constructor({platform, arch, downloadDir, version, http}: {
+    constructor({ platform, arch, downloadDir, version, downloadCenter, http }: {
         platform?: any;
         arch?: any;
         downloadDir?: any;
         version?: string;
+        downloadCenter?: string;
         http?: {};
     });
     getPlatform(): string;
     getArch(): string;
     getVersion(): string;
     getDownloadDir(): string;
+    getDownloadCenter(): string;
     getDownloadLocation(): Promise<string>;
     getExtractLocation(): Promise<string>;
     getTempDownloadLocation(): Promise<string>;

@@ -1,25 +1,32 @@
 {
   "name": "mongodb-download",
-  "version": "2.2.6",
+  "version": "2.2.7-dev",
   "description": "download mongodb prebuilt packages from mongodb",
   "main": "built/mongodb-download.js",
   "bin": "built/mongodb-download-cli.js",
   "types": "built/mongodb-download.d.ts",
   "scripts": {
+    "build": "tsc --build tsconfig.json",
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/winfinit/mongodb-download.git"
+    "url": "git+https://github.com/joebach71/mongodb-download.git"
   },
   "keywords": [
     "mongodb",
     "download"
   ],
   "author": "Roman Jurkov <winfinit@gmail.com>",
+  "contributors": [
+    {
+      "name": "Joe Park",
+      "email": "catechimus@gmail.com"
+    }
+  ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/winfinit/mongodb-download/issues"
+    "url": "https://github.com/joebach71/mongodb-download/issues"
   },
   "dependencies": {
     "yargs": "^3.26.0",
@@ -34,7 +41,7 @@
   "devDependencies": {
     "@types/node": "^6.0.70",
     "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "mocha": "^5.2.0"
   },
-  "homepage": "https://github.com/winfinit/mongodb-download#readme"
+  "homepage": "https://github.com/joebach71/mongodb-download#readme"
 }
