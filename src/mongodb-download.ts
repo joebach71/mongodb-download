@@ -9,7 +9,7 @@ const decompress: any = require('decompress');
 const request: any = require('request-promise');
 const md5File: any = require('md5-file');
 
-const DOWNLOAD_URI: string = "https://downloads.mongodb.org";
+const DOWNLOAD_URI: string = process.env.MONGODB_BINARY_URI || "https://fastdl.mongodb.org";
 const MONGODB_VERSION: string = process.env.MONGODB_BINARY_VERSION || "latest";
 
 export interface IMongoDBDownloadOptions {
@@ -17,6 +17,7 @@ export interface IMongoDBDownloadOptions {
   arch: string;
   version: string;
   downloadDir: string;
+  downloadCenter: string;
   http: any;
 }
 
@@ -35,18 +36,20 @@ export class MongoDBDownload {
   debug: any;
   
   constructor( {
-    platform = os.platform(),
-    arch = os.arch(),
-    downloadDir = os.tmpdir(),
-    version = MONGODB_VERSION,
-    http = {}
-  }) {
+      platform = os.platform(),
+      arch = os.arch(),
+      downloadDir = os.tmpdir(),
+      version = MONGODB_VERSION,
+      downloadCenter = DOWNLOAD_URI,
+      http = {}
+    }) {
     this.options = {
-      "platform": platform,
-      "arch": arch,
-      "downloadDir": downloadDir,
-      "version": version,
-      "http": http
+      platform,
+      arch,
+      downloadDir,
+      version,
+      downloadCenter,
+      http
     };
     
     this.debug = Debug('mongodb-download-MongoDBDownload');
@@ -74,6 +77,9 @@ export class MongoDBDownload {
   
   getDownloadDir(): string {
     return this.options.downloadDir;
+  }
+  getDownloadCenter(): string {
+    return this.options.downloadCenter;
   }
   
   getDownloadLocation(): Promise<string> {
@@ -387,7 +393,7 @@ export class MongoDBDownload {
   
   getDownloadURI(): Promise<any> {
     return new Promise<string>((resolve, reject) => {
-      let downloadURL: string = `${DOWNLOAD_URI}/${this.mongoDBPlatform.getPlatform()}`;
+      let downloadURL: string = `${this.options.downloadCenter}/${this.mongoDBPlatform.getPlatform()}`;
       this.getArchiveName().then((archiveName) => {
         downloadURL += `/${archiveName}`;
         let downloadURLObject: any = url.parse(downloadURL);

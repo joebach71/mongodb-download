@@ -41,6 +41,9 @@ Target platform of a download, possible values: "win32", "darwin", "osx", "linux
 ### downloadDir (optional) 
 Download path
 
+### downloadCenter (optional)
+Download Center Domain
+
 ### http (optional)
 Additional options that are going to be passed to http library, such as "agent".
 
